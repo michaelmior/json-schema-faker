@@ -14,7 +14,7 @@ function objectType(value, path, resolve, traverseCallback) {
   const properties = value.properties || {};
   const patternProperties = value.patternProperties || {};
   const requiredProperties = typeof value.required === 'boolean' ? [] : (value.required || []).slice();
-  const allowsAdditional = value.additionalProperties !== false;
+  const allowsAdditional = value.additionalProperties !== false && !optionAPI('noAdditional');
 
   const propertyKeys = Object.keys(properties);
   const patternPropertyKeys = Object.keys(patternProperties);
@@ -26,7 +26,7 @@ function objectType(value, path, resolve, traverseCallback) {
 
   const additionalProperties = allowsAdditional // eslint-disable-line
     ? (value.additionalProperties === true ? anyType : value.additionalProperties)
-    : value.additionalProperties;
+    : value.additionalProperties && !optionAPI('Additional');
 
   if (!allowsAdditional
     && propertyKeys.length === 0
